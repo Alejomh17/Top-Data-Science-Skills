@@ -178,7 +178,7 @@ def searchJobs(browser, jobName, city=None, jobDict = None, link=None):
         # Find brief description
 
 
-        for i in range(20): #20  ####&&&&
+        for i in range(3): #20 --number of pages to search ####&&&&
             try:
                 # Extract useful classes
                 jobPosting =browser.find_elements_by_class_name('jl')
@@ -253,7 +253,7 @@ def text_cleaner(text):
 
     lines = (line.strip() for line in text.splitlines()) # break into lines
     #lines = [line.strip() for line in text.splitlines()]
-
+    
     chunks = (phrase.strip() for line in lines for phrase in line.split("  ")) # break multi-headlines into a line each
     #chunks = [phrase.strip() for line in lines for phrase in line.split("  ")]
 
@@ -287,7 +287,7 @@ def text_cleaner(text):
 
 
     #print('set of text')
-    text = list(set(text)) # Last, just get the set of these. Ignore counts
+    #text = list(set(text)) # Last, just get the set of these. Ignore counts
                            # we are just looking at whether a term existed or not on the website
 
     #print("We are done! Let's return it!")

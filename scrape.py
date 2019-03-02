@@ -22,14 +22,14 @@ string_from_text
 # If empty initialize
 
 try:
-	jobDict = load_obj('glassDoorDict')
-	link =    load_obj('glassDoorlink')
+	jobDict = load_obj('glassDoorDict1')
+	link =    load_obj('glassDoorlink1')
 except:
-	save_obj([], 'glassDoorlink')
-	save_obj({}, 'glassDoorDict')
+	save_obj([], 'glassDoorlink1')
+	save_obj({}, 'glassDoorDict1')
 
-	jobDict = load_obj('glassDoorDict')
-	link =    load_obj('glassDoorlink')
+	jobDict = load_obj('glassDoorDict1')
+	link =    load_obj('glassDoorlink1')
 
 print('len(jobDict) = '+str(len(jobDict))+ ', len(link) = '+str(len(link)))
 
@@ -38,7 +38,7 @@ print('len(jobDict) = '+str(len(jobDict))+ ', len(link) = '+str(len(link)))
 #    get_data => Scraping for detailed data.
 
 
-get_link = True ####&&&&
+get_link = False ####&&&&
 #get_link = False
 
 
@@ -59,8 +59,8 @@ if get_link or get_data:
 
 
 if get_link :
-	iter_num = 0
-	while iter_num <3: # default 1 ####&&&&
+	iter_num = 1
+	while iter_num <=28: # default 1 ####&&&&
 		print('Starting iteration number {}'.format(iter_num))
 		sleep(get_pause())
 		browser.get(website)
@@ -68,11 +68,11 @@ if get_link :
 		# Initialize cities and jobs
 
 		jobName_lst = ['Data Scientist', 'Data Analyst','Data Engineer']
-		jobName = np.random.choice(jobName_lst)
+		jobName = jobName_lst[int(np.ceil(iter_num/14))] #np.random.choice(jobName_lst)
 		#jobName = 'Data Scientist' ####&&&&
 
-		city_lst = ['San Jose','New York','San Francisco','Detroit','Washington','Austin','Boston','Seattle','Chicago','Los Angeles',' ']
-		city = np.random.choice(city_lst)
+		city_lst = ['Columbus','Cleveland','Cincinnati','San Jose','New York','San Francisco','Detroit','Washington','Austin','Boston','Seattle','Chicago','Los Angeles',' ']
+		city = city_lst[(iter_num-1)%14] #np.random.choice(city_lst)
 		#city = ' '  ####&&&&
 
 		print('jobName = '+jobName+ ', city = '+city)
@@ -92,8 +92,8 @@ if get_link :
 
 		# save dictionary and link
 
-		save_obj(update_jobDict, 'glassDoorDict')
-		save_obj(update_link, 'glassDoorlink')
+		save_obj(update_jobDict, 'glassDoorDict1')
+		save_obj(update_link, 'glassDoorlink1')
 
 		iter_num += 1
 
@@ -103,7 +103,7 @@ if get_link :
 if get_data:
 
 	print('len(link) = '+str(len(link)))
-	while len(link) > 200: # originally 0, a hard coded solution for when only bad links are left.
+	while len(link) > 100: # originally 0, a hard coded solution for when only bad links are left.
 	#for i in range(250): # debugging	####&&&&
 
 		try:
@@ -123,7 +123,7 @@ if get_data:
 			#print('desc_list '+ str(type(desc_list)))
 			description = text_cleaner(desc_list)
 			#description = desc_list
-			#print('description '+ str(type(description)))
+			print('description '+ str(type(description)))
 
 			# jobDict structure {'job_id':['rating','position','company','salary','descr']}
 			jobDict[ids].append(description)
@@ -169,8 +169,8 @@ if get_data:
 
 			# if everything is fine, save
 			#print("Going to save data!!")
-			save_obj(jobDict, 'glassDoorDict')
-			save_obj(link, 'glassDoorlink')
+			save_obj(jobDict, 'glassDoorDict2')
+			save_obj(link, 'glassDoorlink2')
 
 			print('Scraped successfully ' + ids)
 
