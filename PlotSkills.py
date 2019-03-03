@@ -15,14 +15,18 @@ tools = ['python','r','java','c++','sql','excel','scala','stata','sas','spark','
          'cloudera','mongodb','tableau','hive','tensorflow','django','aws','mahout','matlab','cassandra','mapreduce',
          'nosql','nlp','rdbms','qlikview','spotfire','bi','html',
          'ruby','unix','pig']
+         #List of single-word skills to look for
+         
 tools2=['machine learning','big data','natural language','statistical analysis','web scraping','machine vision','computer vision','data mining']
+#List of 2-word skills to look for
+
 jobDict=load_obj('glassDoorDict2')
 counts1=np.zeros([3,len(tools)])
 counts2=np.zeros([3,len(tools2)])
-Jobs=['data scien','data engineer','data analyst']
-Jobs_Full=['Data Scientist','Data Engineer','Data Analyst']
+Jobs=['data scien','data engineer','data analyst']  #Job titles to search for
+Jobs_Full=['Data Scientist','Data Engineer','Data Analyst'] #Job titles for display purposes
 tot=np.zeros(len(Jobs))
-for val in list(jobDict.values())[:]:
+for val in list(jobDict.values())[:]: #Search for skills in listings of the different job titles
     if val[1].find('data scien')>=0 and len(val)>=9:
         tot[0]+=1
         wordlist=[wrd.decode('unicode_escape') for wrd in val[8]]
@@ -38,7 +42,7 @@ for val in list(jobDict.values())[:]:
         
 print(tot)
 c=[[],[],[]]
-for i in range(3):
+for i in range(3): #Normalize count to percent
     c[i]=np.array(list(counts1[i,:])+list(counts2[i,:]))/tot[i]*100
 L=tools+tools2
 
@@ -53,6 +57,8 @@ for i in range(3):
         DFL.append([tool,Jobs_Full[i],c[i][ind]])
 jobs_DF=pd.DataFrame(DFL)
 jobs_DF.columns=['Tool','Title','Frequency']
+#Assemble Dataframe
+
 from matplotlib import rcParams
 rcParams.update({'figure.autolayout': True})
 jobs_DF.pivot(index='Tool', columns='Title', values='Frequency').sort_values(by ='Data Scientist', ascending = False).plot(kind='bar')
@@ -67,6 +73,7 @@ plt.title('Data Engineer')
 jobs_DF.pivot(index='Tool', columns='Title', values='Frequency')['Data Analyst'].sort_values( ascending = False).head(10).plot(kind='bar')
 plt.ylabel('Percent of listings mentioning this tool')
 plt.title('Data Analyst')
+#Plotting
 
 DF=jobs_DF.pivot(index='Tool', columns='Title', values='Frequency').sort_values(by ='Data Scientist', ascending = False)
 DF
@@ -91,11 +98,11 @@ DF
 
     #print(val[1].find('data scien'))
     
-def GenerateNgrams(wordlist,n):
+def GenerateNgrams(wordlist,n): #Needed to search for multi-word skills
     ngrams = zip(*[wordlist[i:] for i in range(n)])
     return [" ".join(ngram) for ngram in ngrams]
 
-def CountWords(wordlist,tools,tools2,counts1,counts2):
+def CountWords(wordlist,tools,tools2,counts1,counts2):  #Function that does the actual searching
     NG1=GenerateNgrams(wordlist,1)
     for ind,tool in enumerate(tools):
         for wrd in NG1:

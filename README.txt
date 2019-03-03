@@ -1,0 +1,1 @@
+# My alterations to previous code used to scrape glassdoor for the top skills requested in data science job listings.  The data is scraped by "scrape.py" using selenium, and saved to the glassDoorlink/dict pickle files.  It's then analyzed with analysis2
